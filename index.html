@@ -344,7 +344,7 @@ async function loadTickerMessagesFromServer() {
         startTicker();
     } catch (error) {
         console.error('Error loading messages:', error);
-        startTicker(); // Start with default messages if server fails
+        startTicker(); 
     }
 }
 
@@ -451,3 +451,23 @@ btnAudio.onclick = () => { audioOn=!audioOn; btnAudio.textContent=audioOn?'🔊 
 tabsContainer.addEventListener('click', (e) => {
     if (e.target.classList.contains('tab')) {
         const newMode = e.target.dataset.mode;
+        const gameId = newMode.startsWith('game_') ? newMode.split('_')[1] : null;
+        switchMode(newMode, gameId);
+    }
+});
+
+async function init(){
+  buildGrid();
+  btnAudio.textContent='🔊 Audio On';
+  await loadGamesFromServer();
+  await loadTickerMessagesFromServer();
+  switchMode('tones');
+}
+
+window.addEventListener('beforeunload', () => stopCardAudio());
+document.addEventListener('click', () => {}, {once:true});
+
+init();
+</script>
+</body>
+</html>
